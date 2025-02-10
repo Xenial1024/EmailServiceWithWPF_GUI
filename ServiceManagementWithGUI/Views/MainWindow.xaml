@@ -1,0 +1,249 @@
+﻿<mah:MetroWindow x:Class="ServiceManagementWithGUI.Views.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:local="clr-namespace:ServiceManagementWithGUI.Views"
+    mc:Ignorable="d"
+    Title="Ustawienia usługi" 
+    WindowStartupLocation="CenterScreen"
+    MaxHeight="350"
+    MaxWidth="575"
+    MinHeight="350"
+    MinWidth="575"
+     >
+    <mah:MetroWindow.Resources>
+        <ResourceDictionary>
+            <local:UshortToStringConverter x:Key="UshortToString"/>
+            <local:HoursOrMinutesToStringConverter x:Key="HoursOrMinutesToString"/>
+            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Background" Value="#FF2F2F2F" />
+                <Setter Property="BorderBrush" Value="#FFCCCCCC" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="Padding" Value="4" />
+                <Setter Property="Margin" Value="5" />
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="Height" Value="27"/>
+                <Setter Property="Width" Value="100"/>
+            </Style>
+            <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Background" Value="#FF2F2F2F" />
+                <Setter Property="BorderBrush" Value="#FFCCCCCC" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="Padding" Value="4" />
+                <Setter Property="Margin" Value="5" />
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="Height" Value="27"/>
+            </Style>
+            <Style TargetType="Label">
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="Margin" Value="5"/>
+            </Style>
+            <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Background" Value="#FF2F2F2F" />
+                <Setter Property="BorderBrush" Value="#FFCCCCCC" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="Padding" Value="4" />
+                <Setter Property="Margin" Value="5" />
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="Height" Value="27"/>
+            </Style>
+        </ResourceDictionary>
+    </mah:MetroWindow.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Label Content="Status usługi:"/>
+
+        <TextBox Grid.Column="1"
+                 Text="{Binding StatusOfReportServiceInPolish, Mode=OneWay}"
+                 Focusable="False"
+                 BorderBrush="Gray"
+                 TextAlignment="Center"
+                 IsReadOnly="True"/>
+
+
+        <Label Grid.Row="1" 
+               Content="Wysyłanie raportów:"/>
+
+        <CheckBox
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="5"
+            IsChecked="{Binding EnableSendingReports}">
+        </CheckBox>
+
+        <Label Grid.Row="2"
+               Content="Godzina wysyłania raportów:" />
+
+        <StackPanel Grid.Row="2"
+                    Grid.Column="1"
+                    Orientation="Horizontal"
+                    IsEnabled="{Binding EnableSendingReports}">
+
+            <Button Content="▼"
+                    Width="27"
+                    Margin="5,5,0,5"
+                    Padding="1,0,1,5"
+                    FontSize="19"
+                    Command="{Binding DecrementSendingTimeCommand}" />
+
+            <TextBox Text ="{Binding Hours,
+                                     UpdateSourceTrigger=PropertyChanged,
+                                     Converter={StaticResource HoursOrMinutesToString}}" 
+                     Width="27"
+                     BorderThickness="1,1,0,1"
+                     Margin="0,5"
+                     TextAlignment="Center"/>
+
+            <TextBox BorderThickness="0,1" 
+                     Text=":" 
+                     Focusable="False"
+                     IsReadOnly="True"
+                     Margin="0,5"
+                     Padding="0,3,0,7"/>
+
+            <TextBox Text ="{Binding Minutes,
+                                     UpdateSourceTrigger=PropertyChanged,
+                                     Converter={StaticResource HoursOrMinutesToString}}" 
+                     Width="27"
+                     BorderThickness="0,1,1,1"
+                     Margin="0,5"
+                     TextAlignment="Center"/>
+
+            <Button Content="▲"
+                    Width="27"
+                    Margin="0,5,5,5"
+                    Padding="1,0,1,5"
+                    FontSize="19"
+                    Command="{Binding IncrementSendingTimeCommand}" />
+
+        </StackPanel>
+
+        <Label Grid.Row="3"
+               Content="Interwał sprawdzania błędów:" />
+
+        <StackPanel Grid.Row="3"
+                    Grid.Column="1"
+                    Orientation="Horizontal">
+
+            <Button Content="▼"
+                    Width="27"
+                    Margin="5,5,0,5"
+                    Padding="1,0,1,5"
+                    FontSize="19" 
+                    Command="{Binding DecreaseErrorCheckingIntervalCommand}"/>
+
+            <TextBox Text="{Binding ErrorCheckingIntervalInMinutes,
+                                    Converter={StaticResource UshortToString},
+                                    UpdateSourceTrigger=PropertyChanged}"
+                     BorderThickness="1,1,0,1"
+                     Margin="0,5"
+                     Padding="5,5,0,5"
+                     Width="40"
+                     MaxLength="4"
+                     TextAlignment="Center"/>
+
+            <TextBox Text="{Binding MinutesText, 
+                            UpdateSourceTrigger=PropertyChanged,
+                            Mode=OneWay}"
+                     BorderThickness="0,1,1,1"
+                     Margin="0,5"
+                     Padding="0,4,5,4"
+                     Focusable="False"
+                     IsReadOnly="True"/>
+
+            <Button Content="▲"
+                    Width="27"
+                    Margin="0,5,5,5"
+                    Padding="1,0,1,5"
+                    FontSize="19"
+                    Command="{Binding IncreaseErrorCheckingIntervalCommand}"/>
+            
+        </StackPanel>
+
+        <Label Grid.Row="4"
+               Content="Email odbiorcy:" />
+
+        <TextBox Grid.Row="4"
+                 Grid.Column="1"
+                 Text="{Binding ReceiverEmail, 
+                                ValidatesOnDataErrors=True, 
+                                UpdateSourceTrigger=PropertyChanged}" 
+                 Grid.ColumnSpan="2" 
+                 Width="339"
+                 HorizontalAlignment="Left"/>
+
+        <Label Grid.Row="5"
+               Content="Uruchom przy starcie systemu: "/>
+
+        <CheckBox Grid.Row="5"
+                  Grid.Column="1"
+                  Margin="5"
+                  IsChecked="{Binding IsAutostartEnabled}"/>
+
+        <StackPanel Grid.Column="3"
+                    Grid.RowSpan="4"
+                    HorizontalAlignment="Right">
+            
+            <Button Width="Auto"
+                    Content="{Binding ContentOfInstallOrUnInstallButton}"
+                    Command="{Binding InstallOrUninstallServiceCommandAndRefreshCommand}"/>
+            
+            <Button Width="Auto"
+                    Content="{Binding ContentOfStartOrStopButton}"
+                    IsEnabled="{Binding IsStartOrStopButtonEnabled}"
+                    Command="{Binding AskAboutSavingAndThenStartOrStopServiceCommand}"/>
+
+            <Button Width="Auto"
+                    Content="Odśwież"
+                    Command="{Binding RefreshStateOfServiceCommand}"/>
+
+        </StackPanel>
+
+        <Label Grid.Row="6"
+               Grid.ColumnSpan="3"
+               Content="Zapisanie zmian w trakcie działania usługi spowoduje jej restart."
+               FontSize="13"
+               FontStyle="Italic"/>
+
+        <StackPanel Grid.Row="7"
+                    Grid.ColumnSpan="3"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom">
+            
+            <Button Content="Anuluj"
+                    Width="Auto"
+                    Command="{Binding CancelSettingsCommand}"/>
+            
+            <Button Content="Zapisz"
+                    Width="Auto"
+                    Command="{Binding SaveSettingsCommand}"
+                    IsEnabled="{Binding EnableSavingSettings}"/>
+            
+            <Button Content="Zamknij"
+                    Width="Auto"
+                    Command="{Binding CloseWindowCommand}"/>
+            
+        </StackPanel>
+
+    </Grid>
+</mah:MetroWindow>
