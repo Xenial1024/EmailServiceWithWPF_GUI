@@ -48,27 +48,6 @@ namespace ReportService
                     SenderEmail = ConfigurationManager.AppSettings["SenderEmail"],
                     SenderEmailPassword = DecryptSenderEmailPassword()
                 });
-
-
-
-
-
-
-                Logger.Debug("Configuration loaded:");
-                Logger.Debug($"Email receiver: {_emailReceiver}");
-                Logger.Debug($"Sending time: {_sendingTime}");
-                Logger.Debug($"Interval: {_intervalInMinutes}");
-                Logger.Debug($"Email initialized: {_email != null}");
-                Logger.Debug($"Error repository initialized: {_errorRepository != null}");
-                Logger.Debug($"HTML email generator initialized: {_htmlEmail != null}");
-
-
-
-
-
-
-
-
             }
             catch (Exception ex)
             {
@@ -106,14 +85,10 @@ namespace ReportService
         }
         private async Task SendError()
         {
-            Logger.Debug("Starting SendError method");
             var errors = _errorRepository.GetLastErrors();
-            Logger.Debug($"GetLastErrors returned: {errors != null}");
 
             if (errors == null || !errors.Any())
                 return;
-            Logger.Debug($"Number of errors found: {errors.Count()}");
-            Logger.Debug($"Email parameters - Receiver: {_emailReceiver}, Interval: {_intervalInMinutes}");
 
             await _email.Send("Błędy w aplikacji", _htmlEmail.GenerateErrors(errors, _intervalInMinutes), _emailReceiver);
 
