@@ -22,6 +22,7 @@ namespace ReportService.ConsoleApp
                 EnableSsl = true,
                 SenderName = "Marek Wypiór",
                 SenderEmail = "testingxenial@gmail.com",
+                SenderEmailPassword = ""
             });
 
             var report = new Report
