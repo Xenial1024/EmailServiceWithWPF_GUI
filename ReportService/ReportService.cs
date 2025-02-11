@@ -104,17 +104,17 @@ namespace ReportService
             {
                 TimeSpan currentTime = DateTime.Now.TimeOfDay;
 
-                if (_wasLastSendingReportFailed)
-                    goto failedSendingReportLabel;
+
 
                 if (ConfigurationManager.AppSettings["EnableSendingReports"] == "false")
                     return;
 
-                // Sprawdź czy nie minęła więcej niż minuta od zaplanowanego czasu
-                if (Math.Abs((currentTime - _sendingTime).TotalMinutes) > 1)
-                    return;
-
-                failedSendingReportLabel:
+                if (!_wasLastSendingReportFailed)
+                {
+                    // Sprawdź czy nie minęła więcej niż minuta od zaplanowanego czasu
+                    if (Math.Abs((currentTime - _sendingTime).TotalMinutes) > 1)
+                        return;
+                }
 
                 Report report = _reportRepository.GetLastNotSentReport();
 
